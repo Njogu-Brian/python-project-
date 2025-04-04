@@ -1,21 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import api from '../services/api';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 function TeacherList() {
   const [teachers, setTeachers] = useState([]);
 
   useEffect(() => {
-    api.get('/teachers/')
-      .then(res => setTeachers(res.data))
-      .catch(err => console.error(err));
+    axios.get("http://localhost:8000/teachers").then((res) => {
+      setTeachers(res.data);
+    });
   }, []);
 
   return (
     <div>
       <h2>Teachers</h2>
       <ul>
-        {teachers.map((t) => (
-          <li key={t.id}>{t.name} - {t.subject}</li>
+        {teachers.map((teacher) => (
+          <li key={teacher.id}>
+            {teacher.name} - {teacher.subject}
+          </li>
         ))}
       </ul>
     </div>

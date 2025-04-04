@@ -1,22 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import Student from './Student';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 function StudentList() {
   const [students, setStudents] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:8000/students/')
-      .then(response => setStudents(response.data))
-      .catch(error => console.error('Error fetching students:', error));
+    axios.get("http://localhost:8000/students").then((res) => {
+      setStudents(res.data);
+    });
   }, []);
 
   return (
     <div>
       <h2>Student List</h2>
-      {students.map(student => (
-        <Student key={student.id} student={student} />
-      ))}
+      <ul>
+        {students.map((student) => (
+          <li key={student.id}>
+            {student.name} - Age: {student.age} - Class: {student.classroom_id}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

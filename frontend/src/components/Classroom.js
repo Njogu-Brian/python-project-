@@ -1,11 +1,26 @@
-import React from 'react';
+import React, { useState } from "react";
+import axios from "axios";
 
-function Classroom({ classroom }) {
+function Classroom() {
+  const [name, setName] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await axios.post("http://localhost:8000/classrooms", { name });
+    setName("");
+  };
+
   return (
-    <div>
-      <h4>{classroom.name}</h4>
-      <p>Capacity: {classroom.capacity}</p>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <h2>Add Classroom</h2>
+      <input
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Classroom Name"
+      />
+      <button type="submit">Add</button>
+    </form>
   );
 }
 
