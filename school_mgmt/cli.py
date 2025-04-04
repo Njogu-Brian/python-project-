@@ -74,3 +74,53 @@ def list_enrollments():
 
 if __name__ == "__main__":
     cli()
+
+# -------- FINANCE COMMANDS --------
+@cli.command()
+@click.argument("student_id", type=int)
+@click.argument("term")
+@click.argument("amount_paid", type=float)
+def add_payment(student_id, term, amount_paid):
+    """Record a fee payment."""
+    payment = Finance.create(student_id, term, amount_paid)
+    click.echo(f"✅ Payment recorded: {payment}")
+
+@cli.command()
+def list_payments():
+    """List all fee payments."""
+    payments = Finance.get_all()
+    for p in payments:
+        click.echo(f"{p.id}: Student {p.student_id}, Term {p.term}, Paid {p.amount_paid}")
+
+# -------- STAFF COMMANDS --------
+@cli.command()
+@click.argument("name")
+@click.argument("role")
+def add_staff(name, role):
+    """Add a staff member."""
+    staff = Staff.create(name, role)
+    click.echo(f"✅ Added staff: {staff}")
+
+@cli.command()
+def list_staff():
+    """List all staff members."""
+    staff_list = Staff.get_all()
+    for s in staff_list:
+        click.echo(f"{s.id}: {s.name} - {s.role}")
+
+# -------- TEACHER COMMANDS --------
+@cli.command()
+@click.argument("name")
+@click.argument("subject")
+@click.argument("classroom_id", type=int)
+def add_teacher(name, subject, classroom_id):
+    """Add a teacher to a classroom."""
+    teacher = Teacher.create(name, subject, classroom_id)
+    click.echo(f"✅ Created teacher: {teacher}")
+
+@cli.command()
+def list_teachers():
+    """List all teachers."""
+    teachers = Teacher.get_all()
+    for t in teachers:
+        click.echo(f"{t.id}: {t.name} teaches {t.subject} in Classroom {t.classroom_id}")
