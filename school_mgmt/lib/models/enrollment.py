@@ -1,30 +1,46 @@
 # lib/models/enrollment.py
 
-from sqlalchemy import Column, Integer, ForeignKey, String
+from sqlalchemy import Column, Integer, String, ForeignKey
+from lib.db import Base, session
 from sqlalchemy.orm import relationship
-from lib.db import Base
+from datetime import datetime
 
 class Enrollment(Base):
-    __tablename__ = "enrollments"
+    __tablename__ = 'enrollments'
 
     id = Column(Integer, primary_key=True)
-    student_id = Column(Integer, ForeignKey("students.id"), nullable=False)
-    classroom_id = Column(Integer, ForeignKey("classrooms.id"), nullable=False)
-    status = Column(String)
+    year = Column(Integer)
+    summary = Column(String)
 
+    student_id = Column(Integer, ForeignKey('students.id'))
     student = relationship("Student", back_populates="enrollments")
-    classroom = relationship("Classroom", back_populates="enrollments")
+
+    def __init__(self, year, summary, student_id):
+        self.year = year
+        self.summary = summary
+        self.student_id = student_id
 
     def __repr__(self):
-        return f"<Enrollment {self.id}: Student {self.student_id} -> Classroom {self.classroom_id}>"
+        return f"<Enrollment {self.id} - {self.year}: {self.summary}>"
 
-    @property
-    def status(self):
-        return self._status
+    def save(self):
+        session.add(self)
+        session.commit()
 
-    @status.setter
-    def status(self, value):
-        if value in ["active", "completed", "dropped"]:
-            self._status = value
-        else:
-            raise ValueError("Status must be one of: active, completed, dropped")
+    def delete(self):
+        session.delete(self)
+        session.commit()
+
+    @classmethod
+    def create(cls, year, summary, student_id):
+        enrollment = cls(year, summary, student_id)
+        enrollment.save()
+        return enrollment
+
+    @classmethod
+    def get_all(cls):
+        return session.query(cls).all()
+
+    @classmethod
+    def find_by_id(cls, id):
+        return session.query(cls).filter_by(id=id).first()
