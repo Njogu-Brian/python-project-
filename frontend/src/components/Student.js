@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from '../services/axiosConfig';
 
 function Student() {
   const [name, setName] = useState("");
@@ -8,7 +8,7 @@ function Student() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post("http://localhost:8000/students", {
+    await api.post("/students/", {
       name,
       age: parseInt(age),
       classroom_id: parseInt(classroom_id),

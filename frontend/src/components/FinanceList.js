@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from '../services/axiosConfig';
 
 function FinanceList() {
   const [payments, setPayments] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:8000/finance").then((res) => {
-      setPayments(res.data);
-    });
+    api.get("/finance")
+      .then((res) => {
+        setPayments(res.data);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch finance records:", err);
+      });
   }, []);
 
   return (

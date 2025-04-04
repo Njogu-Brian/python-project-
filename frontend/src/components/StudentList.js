@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from '../services/axiosConfig';
 
 function StudentList() {
   const [students, setStudents] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:8000/students").then((res) => {
-      setStudents(res.data);
-    });
+    // Use your custom axios instance (api)
+    api.get("/students/")
+      .then((res) => {
+        setStudents(res.data);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch students:", err);
+      });
   }, []);
 
   return (

@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../services/axiosConfig";
 
 function StaffList() {
   const [staff, setStaff] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:8000/staff").then((res) => {
-      setStaff(res.data);
-    });
+    api.get("/staff/")
+      .then((res) => {
+        setStaff(res.data);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch staff:", err);
+      });
   }, []);
 
   return (

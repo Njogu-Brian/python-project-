@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../services/axiosConfig";
 
 function TeacherList() {
   const [teachers, setTeachers] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:8000/teachers").then((res) => {
-      setTeachers(res.data);
-    });
+    api.get("/teachers/")
+      .then((res) => {
+        setTeachers(res.data);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch teachers:", err);
+      });
   }, []);
 
   return (

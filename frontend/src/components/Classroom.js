@@ -1,13 +1,17 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from '../services/axiosConfig';  // This is your custom axios instance
 
 function Classroom() {
   const [name, setName] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post("http://localhost:8000/classrooms", { name });
-    setName("");
+    try {
+      await api.post("/classrooms/", { name });  // Use `api` instead of `axios`
+      setName("");
+    } catch (err) {
+      console.error("Error creating classroom:", err);
+    }
   };
 
   return (
