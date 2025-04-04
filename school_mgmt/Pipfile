@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 sqlalchemy = "*"
 click = "*"
+fastapi = "*"
+uvicorn = "*"
 
 [dev-packages]
 ipython = "*"
