@@ -9,13 +9,12 @@ from lib.models.teacher import Teacher
 from lib.models.staff import Staff
 from lib.models.finance import Finance
 
-
 @click.group()
 def cli():
     """🎓 School Management CLI"""
     pass
 
-# Command: init-db
+# -------- INIT --------
 @cli.command()
 def init():
     """Initialize the database and create tables."""
@@ -72,9 +71,6 @@ def list_enrollments():
     for e in enrollments:
         click.echo(f"{e.id}: Student ID {e.student_id}, Year {e.year} - {e.summary}")
 
-if __name__ == "__main__":
-    cli()
-
 # -------- FINANCE COMMANDS --------
 @cli.command()
 @click.argument("student_id", type=int)
@@ -124,3 +120,7 @@ def list_teachers():
     teachers = Teacher.get_all()
     for t in teachers:
         click.echo(f"{t.id}: {t.name} teaches {t.subject} in Classroom {t.classroom_id}")
+
+# ✅ Entry Point
+if __name__ == "__main__":
+    cli()
