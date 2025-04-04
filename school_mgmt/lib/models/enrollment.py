@@ -1,9 +1,8 @@
 # lib/models/enrollment.py
 
 from sqlalchemy import Column, Integer, String, ForeignKey
-from lib.db import Base, session
 from sqlalchemy.orm import relationship
-from datetime import datetime
+from lib.db import Base, session
 
 class Enrollment(Base):
     __tablename__ = 'enrollments'
@@ -21,7 +20,7 @@ class Enrollment(Base):
         self.student_id = student_id
 
     def __repr__(self):
-        return f"<Enrollment {self.id} - {self.year}: {self.summary}>"
+        return f"<Enrollment {self.id}: {self.year}, {self.summary}>"
 
     def save(self):
         session.add(self)

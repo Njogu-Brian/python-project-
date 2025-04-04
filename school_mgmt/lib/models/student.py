@@ -1,8 +1,8 @@
 # lib/models/student.py
 
 from sqlalchemy import Column, Integer, String, ForeignKey
-from lib.db import Base, session
 from sqlalchemy.orm import relationship
+from lib.db import Base, session
 
 class Student(Base):
     __tablename__ = 'students'
@@ -10,8 +10,8 @@ class Student(Base):
     id = Column(Integer, primary_key=True)
     _name = Column("name", String)
     _age = Column("age", Integer)
-
     classroom_id = Column(Integer, ForeignKey('classrooms.id'))
+
     classroom = relationship("Classroom", back_populates="students")
     enrollments = relationship("Enrollment", back_populates="student")
 
@@ -23,7 +23,7 @@ class Student(Base):
     def __repr__(self):
         return f"<Student {self.id}: {self.name}, Age: {self.age}>"
 
-    # Properties with validation
+    # Property: name
     @property
     def name(self):
         return self._name
@@ -35,6 +35,7 @@ class Student(Base):
         else:
             raise ValueError("Name must be a non-empty string.")
 
+    # Property: age
     @property
     def age(self):
         return self._age
@@ -57,7 +58,7 @@ class Student(Base):
 
     @classmethod
     def create(cls, name, age, classroom_id=None):
-        student = cls(name=name, age=age, classroom_id=classroom_id)
+        student = cls(name, age, classroom_id)
         student.save()
         return student
 

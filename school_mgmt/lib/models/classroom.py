@@ -1,8 +1,8 @@
 # lib/models/classroom.py
 
 from sqlalchemy import Column, Integer, String
-from lib.db import Base, session
 from sqlalchemy.orm import relationship
+from lib.db import Base, session
 
 class Classroom(Base):
     __tablename__ = 'classrooms'
@@ -42,7 +42,6 @@ class Classroom(Base):
         else:
             raise ValueError("Capacity must be a positive integer.")
 
-    # ORM Methods
     def save(self):
         session.add(self)
         session.commit()
@@ -53,7 +52,7 @@ class Classroom(Base):
 
     @classmethod
     def create(cls, name, capacity):
-        classroom = cls(name=name, capacity=capacity)
+        classroom = cls(name, capacity)
         classroom.save()
         return classroom
 
