@@ -21,6 +21,10 @@ def init_db():
     from lib.models.classroom import Classroom
     from lib.models.student import Student
     from lib.models.enrollment import Enrollment
+    from lib.models.teacher import Teacher
+    from lib.models.staff import Staff
+    from lib.models.finance import Finance
+
 
     Base.metadata.create_all(engine)
     print("✅ Database and tables created successfully!")

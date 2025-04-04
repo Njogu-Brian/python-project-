@@ -5,6 +5,10 @@ from lib.db import init_db
 from lib.models.classroom import Classroom
 from lib.models.student import Student
 from lib.models.enrollment import Enrollment
+from lib.models.teacher import Teacher
+from lib.models.staff import Staff
+from lib.models.finance import Finance
+
 
 @click.group()
 def cli():
