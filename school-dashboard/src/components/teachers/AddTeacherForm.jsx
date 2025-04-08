@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import api from "../../services/axiosConfig";
 
 const AddTeacherForm = ({ onAddTeacher }) => {
     const [newTeacher, setNewTeacher] = useState({
@@ -11,20 +12,22 @@ const AddTeacherForm = ({ onAddTeacher }) => {
         setNewTeacher({ ...newTeacher, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Ensure no empty values
         if (!newTeacher.name || !newTeacher.subject || !newTeacher.experience) {
             alert("All fields are required!");
             return;
         }
 
-        // Send new teacher to parent component
-        onAddTeacher(newTeacher);
-
-        // Reset form
-        setNewTeacher({ name: "", subject: "", experience: "" });
+        try {
+            const response = await api.post("/teachers", newTeacher);
+            onAddTeacher(response.data);  // Notify parent to update UI
+            setNewTeacher({ name: "", subject: "", experience: "" });  // Clear form
+        } catch (error) {
+            console.error("Error adding teacher:", error);
+            alert("Failed to add teacher. Please try again.");
+        }
     };
 
     return (
