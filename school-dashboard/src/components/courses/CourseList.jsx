@@ -21,7 +21,7 @@ const CourseList = ({ courses, onEdit, onDelete }) => {
               <td>{course.instructor}</td>
               <td>{course.duration}</td>
               <td>
-                <Button variant="warning" size="sm" className="me-2" onClick={() => onEdit(course)}>Edit</Button>
+                <Button variant="warning" size="sm" onClick={() => onEdit(course)}>Edit</Button>{' '}
                 <Button variant="danger" size="sm" onClick={() => onDelete(course.id)}>Delete</Button>
               </td>
             </tr>

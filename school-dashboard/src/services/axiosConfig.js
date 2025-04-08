@@ -1,8 +1,8 @@
 // src/services/axiosConfig.js
-import axios from 'axios';
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:8000', // Make sure this matches your FastAPI address
+  baseURL: "http://localhost:8000", // Make sure FastAPI is running here
 });
 
 export default api;
