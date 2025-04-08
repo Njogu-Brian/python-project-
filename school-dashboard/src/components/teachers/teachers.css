@@ -1,0 +1,81 @@
+/* General Page Styling */
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding-top: 20px;
+}
+
+/* Card Styling */
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Styling */
+.table th {
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f8f9fa;
+}
+
+/* Form Styling */
+.form-control {
+    border-radius: 5px;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-danger:hover {
+    background-color: #bd2130;
+    border-color: #a71d2a;
+}
+
+/* Sorting and Filter Controls */
+.sort-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.sort-controls select,
+.sort-controls input {
+    width: 48%;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sort-controls {
+        flex-direction: column;
+    }
+    
+    .sort-controls select,
+    .sort-controls input {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}

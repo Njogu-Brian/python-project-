@@ -1,0 +1,21 @@
+.course-header {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.card {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.table th {
+    text-align: center;
+}
+
+.btn {
+    font-size: 14px;
+}

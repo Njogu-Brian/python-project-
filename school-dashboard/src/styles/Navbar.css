@@ -1,0 +1,32 @@
+/* Navbar.css */
+.custom-navbar {
+    background-color: #007bff !important; /* Bootstrap blue */
+    padding: 10px 15px;
+  }
+  
+  .navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white !important; /* Title remains white */
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar-nav .nav-item .nav-link {
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 8px 15px;
+    color: black !important; /* Ensure menu items are black */
+    transition: color 0.3s ease-in-out;
+  }
+  
+  .navbar-nav .nav-item .nav-link:hover {
+    color: #f8d210 !important; /* Yellow on hover */
+  }
+  
+  .navbar-nav .nav-item .nav-link.active {
+    font-weight: bold;
+    text-decoration: underline;
+    color: white !important;
+  }
+  
