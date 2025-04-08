@@ -1,11 +1,17 @@
 from pydantic import BaseModel
 
-class StaffCreate(BaseModel):
+class StaffBase(BaseModel):
     name: str
     role: str
 
-class StaffOut(StaffCreate):
+class StaffCreate(StaffBase):
+    pass
+
+class StaffUpdate(StaffBase):
+    pass
+
+class StaffOut(StaffBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True

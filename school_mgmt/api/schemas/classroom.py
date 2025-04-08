@@ -4,8 +4,14 @@ class ClassroomCreate(BaseModel):
     name: str
     capacity: int
 
-class ClassroomOut(ClassroomCreate):
+class ClassroomUpdate(BaseModel):
+    name: str
+    capacity: int
+
+class ClassroomOut(BaseModel):
     id: int
+    name: str
+    capacity: int
 
     class Config:
-        from_attributes = True  # This replaces orm_mode=True in Pydantic v2
+        from_attributes = True  # use `orm_mode` if using Pydantic v1
