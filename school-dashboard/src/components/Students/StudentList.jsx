@@ -1,18 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { fetchStudents, deleteStudent } from "../../services/studentService";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./StudentLists.css"; 
+import "./StudentList.css";
 
-const StudentList = ({ students, onEditClick, onDeleteClick }) => {
+const StudentList = ({ onEditClick }) => {
+  const [students, setStudents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const studentsPerPage = 10;
-
-  // Sorting
   const [sortField, setSortField] = useState("name");
+
+  useEffect(() => {
+    loadStudents();
+  }, []);
+
+  const loadStudents = async () => {
+    try {
+      const res = await fetchStudents();
+      setStudents(res.data);
+    } catch (err) {
+      console.error("Error fetching students:", err);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    await deleteStudent(id);
+    loadStudents();
+  };
+
   const sortedStudents = [...students].sort((a, b) =>
     a[sortField].toString().localeCompare(b[sortField].toString())
   );
 
-  // Pagination Logic
   const totalPages = Math.ceil(students.length / studentsPerPage);
   const indexOfLastStudent = currentPage * studentsPerPage;
   const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
@@ -22,7 +40,6 @@ const StudentList = ({ students, onEditClick, onDeleteClick }) => {
     <div className="student-list-container">
       <h5 className="text-center">Student List</h5>
 
-      {/* Sorting Controls */}
       <div className="sorting-controls">
         <label>Sort by:</label>
         <select className="form-select" onChange={(e) => setSortField(e.target.value)}>
@@ -31,7 +48,6 @@ const StudentList = ({ students, onEditClick, onDeleteClick }) => {
         </select>
       </div>
 
-      {/* Student Table */}
       <table className="table table-hover">
         <thead className="table-light">
           <tr>
@@ -49,14 +65,13 @@ const StudentList = ({ students, onEditClick, onDeleteClick }) => {
               <td>{student.grade}</td>
               <td>
                 <button className="btn btn-sm btn-success me-2" onClick={() => onEditClick(student)}>Edit</button>
-                <button className="btn btn-sm btn-danger" onClick={() => onDeleteClick(student.id)}>Delete</button>
+                <button className="btn btn-sm btn-danger" onClick={() => handleDelete(student.id)}>Delete</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      {/* Pagination Controls */}
       <div className="pagination-controls">
         <button className="btn btn-sm btn-secondary" disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>← Previous</button>
         <span className="mx-2">Page {currentPage} of {totalPages}</span>

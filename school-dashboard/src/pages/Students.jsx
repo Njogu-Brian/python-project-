@@ -3,122 +3,117 @@ import StudentList from "../components/Students/StudentList";
 import AddStudentForm from "../components/Students/AddStudentForm";
 import EditStudentForm from "../components/Students/EditStudentForm";
 import SortFilterControls from "../components/Students/SortFilterControls";
+import { fetchStudents, addStudent, updateStudent, deleteStudent } from "../services/studentService";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../styles/Students.css"; 
+import "../styles/Students.css";
 
 const Students = () => {
-    const [students, setStudents] = useState([]);
-    const [editingStudent, setEditingStudent] = useState(null);
-    const [sortOption, setSortOption] = useState("name");
-    const [showOnlyGrade, setShowOnlyGrade] = useState("");
+  const [students, setStudents] = useState([]);
+  const [editingStudent, setEditingStudent] = useState(null);
+  const [sortOption, setSortOption] = useState("name");
+  const [showOnlyGrade, setShowOnlyGrade] = useState("");
 
-    useEffect(() => {
-        fetch("http://localhost:4000/students")
-            .then(res => res.json())
-            .then(data => setStudents(data))
-            .catch(error => console.error("Error fetching students:", error));
-    }, []);
+  // Fetch students on load
+  useEffect(() => {
+    loadStudents();
+  }, []);
 
-    const addStudent = (newStudent) => {
-        fetch("http://localhost:4000/students", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(newStudent),
-        })
-        .then(res => res.json())
-        .then(data => setStudents([...students, data]))
-        .catch(error => console.error("Error adding student:", error));
-    };
+  const loadStudents = async () => {
+    try {
+      const res = await fetchStudents();
+      setStudents(res.data);
+    } catch (error) {
+      console.error("Error fetching students:", error);
+    }
+  };
 
-    const editStudent = (e) => {
-        setEditingStudent({ ...editingStudent, [e.target.name]: e.target.value });
-    };
+  const handleAddStudent = async (newStudent) => {
+    try {
+      await addStudent(newStudent);
+      loadStudents();
+    } catch (error) {
+      console.error("Error adding student:", error);
+    }
+  };
 
-    const saveEditStudent = (e) => {
-        e.preventDefault();
+  const handleEditChange = (e) => {
+    setEditingStudent({ ...editingStudent, [e.target.name]: e.target.value });
+  };
 
-        fetch(`http://localhost:4000/students/${editingStudent.id}`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(editingStudent),
-        })
-        .then(res => res.json())
-        .then(updatedStudent => {
-            setStudents(students.map(student => 
-                student.id === updatedStudent.id ? updatedStudent : student
-            ));
-            setEditingStudent(null);
-        })
-        .catch(error => console.error("Error updating student:", error));
-    };
+  const handleSaveEdit = async (e) => {
+    e.preventDefault();
+    try {
+      await updateStudent(editingStudent.id, editingStudent);
+      setEditingStudent(null);
+      loadStudents();
+    } catch (error) {
+      console.error("Error updating student:", error);
+    }
+  };
 
-    const deleteStudent = (id) => {
-        fetch(`http://localhost:4000/students/${id}`, {
-            method: "DELETE",
-        })
-        .then(() => setStudents(students.filter(student => student.id !== id)))
-        .catch(error => console.error("Error deleting student:", error));
-    };
+  const handleDeleteStudent = async (id) => {
+    try {
+      await deleteStudent(id);
+      loadStudents();
+    } catch (error) {
+      console.error("Error deleting student:", error);
+    }
+  };
 
-    const sortStudents = (a, b) => {
-        if (sortOption === "name") return a.name.localeCompare(b.name);
-        if (sortOption === "age") return a.age - b.age;
-        return 0;
-    };
+  const sortStudents = (a, b) => {
+    if (sortOption === "name") return a.name.localeCompare(b.name);
+    if (sortOption === "age") return a.age - b.age;
+    return 0;
+  };
 
-    const filteredStudents = students
-        .filter(student => showOnlyGrade ? student.grade.toLowerCase() === showOnlyGrade.toLowerCase() : true)
-        .sort(sortStudents);
+  const filteredStudents = students
+    .filter(student => showOnlyGrade ? student.grade?.toLowerCase() === showOnlyGrade.toLowerCase() : true)
+    .sort(sortStudents);
 
-    return (
-        <div className="container student-container">
-            <h2 className="text-center mb-4">🎓 Students Management</h2>
+  return (
+    <div className="container student-container">
+      <h2 className="text-center mb-4">🎓 Students Management</h2>
 
-            {/* Sorting & Filtering Controls */}
-            <SortFilterControls 
-                sortOption={sortOption} 
-                setSortOption={setSortOption} 
-                showOnlyGrade={showOnlyGrade} 
-                setShowOnlyGrade={setShowOnlyGrade} 
-            />
+      <SortFilterControls
+        sortOption={sortOption}
+        setSortOption={setSortOption}
+        showOnlyGrade={showOnlyGrade}
+        setShowOnlyGrade={setShowOnlyGrade}
+      />
 
-            {/* Row Layout for Forms & Student List */}
-            <div className="row">
-                <div className="col-md-5">
-                    {/* Add Student Form */}
-                    <div className="card shadow p-3">
-                        <h5>Add Student</h5>
-                        <AddStudentForm onAddStudent={addStudent} />
-                    </div>
+      <div className="row">
+        <div className="col-md-5">
+          <div className="card shadow p-3">
+            <h5>Add Student</h5>
+            <AddStudentForm onAddStudent={handleAddStudent} />
+          </div>
 
-                    {/* Edit Student Form */}
-                    {editingStudent && (
-                        <div className="card shadow p-3 mt-3">
-                            <h5>Edit Student</h5>
-                            <EditStudentForm 
-                                editingStudent={editingStudent} 
-                                onEditChange={editStudent} 
-                                onSaveEdit={saveEditStudent} 
-                                onCancelEdit={() => setEditingStudent(null)} 
-                            />
-                        </div>
-                    )}
-                </div>
-
-                {/* Student List Section */}
-                <div className="col-md-7">
-                    <div className="card shadow p-3">
-                        <h5>Student List</h5>
-                        <StudentList 
-                            students={filteredStudents} 
-                            onEditClick={setEditingStudent} 
-                            onDeleteClick={deleteStudent} 
-                        />
-                    </div>
-                </div>
+          {editingStudent && (
+            <div className="card shadow p-3 mt-3">
+              <h5>Edit Student</h5>
+              <EditStudentForm
+                editingStudent={editingStudent}
+                onEditChange={handleEditChange}
+                onSaveEdit={handleSaveEdit}
+                onCancelEdit={() => setEditingStudent(null)}
+              />
             </div>
+          )}
         </div>
-    );
+
+        <div className="col-md-7">
+          <div className="card shadow p-3">
+            <h5>Student List</h5>
+            <StudentList
+              students={filteredStudents}
+              onEditClick={setEditingStudent}
+              onDeleteClick={handleDeleteStudent}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Students;

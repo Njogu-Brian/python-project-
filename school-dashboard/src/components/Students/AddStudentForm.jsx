@@ -1,17 +1,23 @@
 import React, { useState } from "react";
+import { addStudent } from "../../services/studentService";
 import "./AddStudentForm.css";
 
-const AddStudentForm = ({ onAddStudent }) => {
+const AddStudentForm = ({ onStudentAdded }) => {
   const [student, setStudent] = useState({ name: "", age: "", grade: "" });
 
   const handleChange = (e) => {
     setStudent({ ...student, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onAddStudent(student);
-    setStudent({ name: "", age: "", grade: "" });
+    try {
+      await addStudent(student);
+      onStudentAdded();
+      setStudent({ name: "", age: "", grade: "" });
+    } catch (err) {
+      console.error("Failed to add student:", err);
+    }
   };
 
   return (
