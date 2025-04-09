@@ -4,8 +4,9 @@ from typing import List
 class StudentBase(BaseModel):
     name: str
 
-class StudentCreate(StudentBase):
-    course_ids: List[int]
+class StudentCreate(BaseModel):
+    name: str
+    classroom_id: int
 
 class StudentOut(StudentBase):
     id: int

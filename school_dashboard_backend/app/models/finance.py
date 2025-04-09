@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, Float, ForeignKey
 from sqlalchemy.orm import relationship
 from app.models.base import Base
+from app.database import Base, engine, get_db 
 
 class Finance(Base):
     __tablename__ = "finances"

@@ -1,16 +1,14 @@
+from sqlalchemy.orm import Session
 from app.models.student import Student
 from app.models.course import Course
 from app.db.session import SessionLocal
 
-def create_student(name: str, course_ids: list[int]):
-    db = SessionLocal()
-    courses = db.query(Course).filter(Course.id.in_(course_ids)).all()
-    student = Student(name=name, courses=courses)
-    db.add(student)
+def create_student(name: str, classroom_id: int, db: Session):
+    new_student = Student(name=name, classroom_id=classroom_id)
+    db.add(new_student)
     db.commit()
-    db.refresh(student)
-    db.close()
-    return student
+    db.refresh(new_student)
+    return new_student
 
 def get_students():
     db = SessionLocal()

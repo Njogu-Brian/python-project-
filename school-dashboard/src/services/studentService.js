@@ -4,14 +4,15 @@ import api from "./axiosConfig";
 export const fetchStudents = () => api.get("/students");
 
 // Create a new student
-export const addStudent = (student) => {
-  return api.post("/students", {
+export const addStudent = (student) =>
+  api.post("/students", {
     name: student.name,
-    age: parseInt(student.age),
+    age: student.age,
     grade: student.grade,
-    course_ids: [1], // TODO: Replace with real course selection later
+    course_ids: student.course_ids,
+    classroom_id: parseInt(student.classroom_id),
   });
-};
+
 
 // Update student
 export const updateStudent = (id, student) => {

@@ -1,30 +1,41 @@
-import React, { useState } from "react";
-import { addStudent } from "../../services/studentService";
-import "./AddStudentForm.css";
+import React, { useState, useEffect } from "react";
 
-const AddStudentForm = ({ onStudentAdded }) => {
-  const [student, setStudent] = useState({ name: "", age: "", grade: "" });
+const AddStudentForm = ({ onAddStudent, classrooms }) => {
+  const [student, setStudent] = useState({ name: "", classroom_id: "" });
 
   const handleChange = (e) => {
     setStudent({ ...student, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      await addStudent(student);
-      onStudentAdded();
-      setStudent({ name: "", age: "", grade: "" });
-    } catch (err) {
-      console.error("Failed to add student:", err);
-    }
+    onAddStudent(student);
+    setStudent({ name: "", classroom_id: "" });
   };
 
   return (
     <form className="add-student-form" onSubmit={handleSubmit}>
-      <input type="text" name="name" placeholder="Student Name" value={student.name} onChange={handleChange} required />
-      <input type="number" name="age" placeholder="Age" value={student.age} onChange={handleChange} required />
-      <input type="text" name="grade" placeholder="Grade (e.g., Grade 5)" value={student.grade} onChange={handleChange} required />
+      <input
+        type="text"
+        name="name"
+        placeholder="Student Name"
+        value={student.name}
+        onChange={handleChange}
+        required
+      />
+      <select
+        name="classroom_id"
+        value={student.classroom_id}
+        onChange={handleChange}
+        required
+      >
+        <option value="">Select a class</option>
+        {classrooms.map((classroom) => (
+          <option key={classroom.id} value={classroom.id}>
+            {classroom.name}
+          </option>
+        ))}
+      </select>
       <button type="submit">Add Student</button>
     </form>
   );

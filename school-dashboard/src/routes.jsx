@@ -6,6 +6,7 @@ import Teachers from "./pages/Teachers";
 import Courses from "./pages/Courses";
 import Finance from "./pages/Finance";
 import Settings from "./pages/Settings";
+import Classes from "./pages/Classes";
 
 const routes = createBrowserRouter([
   {
@@ -18,8 +19,10 @@ const routes = createBrowserRouter([
       { path: "/courses", element: <Courses /> },
       { path: "/finance", element: <Finance /> },
       { path: "/settings", element: <Settings /> },
+      { path: "/classes", element: <Classes /> },
     ],
   },
 ]);
 
 export default routes;
+

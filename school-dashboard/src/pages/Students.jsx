@@ -4,6 +4,7 @@ import AddStudentForm from "../components/Students/AddStudentForm";
 import EditStudentForm from "../components/Students/EditStudentForm";
 import SortFilterControls from "../components/Students/SortFilterControls";
 import { fetchStudents, addStudent, updateStudent, deleteStudent } from "../services/studentService";
+import { fetchClassrooms } from "../services/classroomService"; // Make sure this exists!
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/Students.css";
 
@@ -11,11 +12,14 @@ const Students = () => {
   const [students, setStudents] = useState([]);
   const [editingStudent, setEditingStudent] = useState(null);
   const [sortOption, setSortOption] = useState("name");
-  const [showOnlyGrade, setShowOnlyGrade] = useState("");
+  const [classrooms, setClassrooms] = useState([]);
 
-  // Fetch students on load
+  // Load students and classrooms
   useEffect(() => {
     loadStudents();
+    fetchClassrooms()
+      .then((res) => setClassrooms(res.data))
+      .catch(console.error);
   }, []);
 
   const loadStudents = async () => {
@@ -62,13 +66,10 @@ const Students = () => {
 
   const sortStudents = (a, b) => {
     if (sortOption === "name") return a.name.localeCompare(b.name);
-    if (sortOption === "age") return a.age - b.age;
     return 0;
   };
 
-  const filteredStudents = students
-    .filter(student => showOnlyGrade ? student.grade?.toLowerCase() === showOnlyGrade.toLowerCase() : true)
-    .sort(sortStudents);
+  const sortedStudents = students.sort(sortStudents);
 
   return (
     <div className="container student-container">
@@ -77,15 +78,13 @@ const Students = () => {
       <SortFilterControls
         sortOption={sortOption}
         setSortOption={setSortOption}
-        showOnlyGrade={showOnlyGrade}
-        setShowOnlyGrade={setShowOnlyGrade}
       />
 
       <div className="row">
         <div className="col-md-5">
           <div className="card shadow p-3">
             <h5>Add Student</h5>
-            <AddStudentForm onAddStudent={handleAddStudent} />
+            <AddStudentForm onAddStudent={handleAddStudent} classrooms={classrooms} />
           </div>
 
           {editingStudent && (
@@ -96,6 +95,7 @@ const Students = () => {
                 onEditChange={handleEditChange}
                 onSaveEdit={handleSaveEdit}
                 onCancelEdit={() => setEditingStudent(null)}
+                classrooms={classrooms}
               />
             </div>
           )}
@@ -105,7 +105,7 @@ const Students = () => {
           <div className="card shadow p-3">
             <h5>Student List</h5>
             <StudentList
-              students={filteredStudents}
+              students={sortedStudents}
               onEditClick={setEditingStudent}
               onDeleteClick={handleDeleteStudent}
             />

@@ -49,27 +49,26 @@ const StudentList = ({ onEditClick }) => {
       </div>
 
       <table className="table table-hover">
-        <thead className="table-light">
-          <tr>
-            <th>Name</th>
-            <th>Age</th>
-            <th>Grade</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentStudents.map((student) => (
-            <tr key={student.id}>
-              <td>{student.name}</td>
-              <td>{student.age} years</td>
-              <td>{student.grade}</td>
-              <td>
-                <button className="btn btn-sm btn-success me-2" onClick={() => onEditClick(student)}>Edit</button>
-                <button className="btn btn-sm btn-danger" onClick={() => handleDelete(student.id)}>Delete</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+          <thead className="table-light">
+      <tr>
+        <th>Name</th>
+        <th>Class</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {currentStudents.map((student) => (
+        <tr key={student.id}>
+          <td>{student.name}</td>
+          <td>{student.classroom?.name || "N/A"}</td>
+          <td>
+            <button className="btn btn-sm btn-success me-2" onClick={() => onEditClick(student)}>Edit</button>
+            <button className="btn btn-sm btn-danger" onClick={() => onDeleteClick(student.id)}>Delete</button>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+
       </table>
 
       <div className="pagination-controls">
