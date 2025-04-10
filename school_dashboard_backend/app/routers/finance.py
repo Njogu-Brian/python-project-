@@ -1,38 +1,31 @@
-from fastapi import APIRouter, HTTPException
-from typing import List
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
 from app.schemas.finance import FinanceCreate, FinanceUpdate, FinanceOut
-from app.crud.finance import (
-    create_finance_record,
-    get_finance_records,
-    get_finance_by_student,
-    update_finance_record,
-    delete_finance_record,
-)
+from app.crud import finance as crud
+from app.db.database import get_db
+from typing import List
 
 router = APIRouter()
 
 @router.post("/", response_model=FinanceOut)
-def add_payment(record: FinanceCreate):
-    return create_finance_record(student_id=record.student_id, amount_paid=record.amount_paid)
+def create_finance(record: FinanceCreate, db: Session = Depends(get_db)):
+    return crud.create_record(db=db, record=record)
 
 @router.get("/", response_model=List[FinanceOut])
-def list_all_finance():
-    return get_finance_records()
+def list_finance_records(db: Session = Depends(get_db)):
+    return crud.get_finance_records(db)
 
-@router.get("/student/{student_id}", response_model=List[FinanceOut])
-def get_student_payments(student_id: int):
-    return get_finance_by_student(student_id)
-
-@router.put("/{record_id}", response_model=FinanceOut)
-def update_payment(record_id: int, update: FinanceUpdate):
-    updated = update_finance_record(record_id, amount_paid=update.amount_paid)
-    if not updated:
-        raise HTTPException(status_code=404, detail="Record not found")
-    return updated
-
-@router.delete("/{record_id}", response_model=FinanceOut)
-def remove_payment(record_id: int):
-    record = delete_finance_record(record_id)
+@router.get("/{record_id}", response_model=FinanceOut)
+def get_finance_record(record_id: int, db: Session = Depends(get_db)):
+    record = crud.get_finance_by_id(db, record_id)
     if not record:
         raise HTTPException(status_code=404, detail="Record not found")
     return record
+
+@router.put("/{record_id}", response_model=FinanceOut)
+def update_finance_record(record_id: int, record: FinanceUpdate, db: Session = Depends(get_db)):
+    return crud.update_record(db, record_id, record)
+
+@router.delete("/{record_id}")
+def delete_finance_record(record_id: int, db: Session = Depends(get_db)):
+    return crud.delete_record(db, record_id)

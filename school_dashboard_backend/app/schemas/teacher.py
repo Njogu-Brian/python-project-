@@ -6,11 +6,11 @@ class TeacherBase(BaseModel):
 class TeacherCreate(TeacherBase):
     pass
 
+class TeacherUpdate(TeacherBase):
+    pass
+
 class TeacherOut(TeacherBase):
     id: int
-    model_config = {
-    "from_attributes": True
-}
-class TeacherUpdate(BaseModel):
-    name: str
 
+    class Config:
+        from_attributes = True

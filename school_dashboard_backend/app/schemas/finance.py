@@ -1,16 +1,17 @@
 from pydantic import BaseModel
 
 class FinanceBase(BaseModel):
-    student_id: int
-    amount_paid: float
+    description: str
+    amount: int
 
 class FinanceCreate(FinanceBase):
     pass
 
+class FinanceUpdate(FinanceBase):
+    pass
+
 class FinanceOut(FinanceBase):
     id: int
-    model_config = {
-    "from_attributes": True
-}
-class FinanceUpdate(BaseModel):
-    amount_paid: float
+
+    class Config:
+        from_attributes = True
