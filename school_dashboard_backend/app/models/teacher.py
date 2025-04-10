@@ -7,5 +7,6 @@ class Teacher(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
+    experience = Column(Integer, nullable=False)
 
     courses = relationship("Course", back_populates="teacher")

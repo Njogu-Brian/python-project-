@@ -8,7 +8,6 @@ const TeacherList = ({ teachers, onEditClick, onDeleteClick }) => {
         <thead>
           <tr>
             <th>Name</th>
-            <th>Subject</th>
             <th>Experience (Years)</th>
             <th>Actions</th>
           </tr>
@@ -17,7 +16,6 @@ const TeacherList = ({ teachers, onEditClick, onDeleteClick }) => {
           {teachers.map((teacher) => (
             <tr key={teacher.id}>
               <td>{teacher.name}</td>
-              <td>{teacher.subject}</td>
               <td>{teacher.experience}</td>
               <td>
                 <button 
