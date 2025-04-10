@@ -1,5 +1,6 @@
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional
+from app.schemas.classroom import ClassroomOut  # ✅ Import the nested schema
 
 class StudentBase(BaseModel):
     name: str
@@ -13,5 +14,7 @@ class StudentUpdate(StudentBase):
 
 class StudentOut(StudentBase):
     id: int
+    classroom: Optional[ClassroomOut]  # ✅ Include full classroom object
+
     class Config:
         from_attributes = True

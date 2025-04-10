@@ -1,15 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from typing import List
 from app.schemas.classroom import ClassroomCreate, ClassroomUpdate, ClassroomOut
 from app.crud import classrooms as crud
 from app.db.database import get_db
-from typing import List
 
 router = APIRouter()
 
 @router.post("/", response_model=ClassroomOut)
 def create_classroom(classroom: ClassroomCreate, db: Session = Depends(get_db)):
-    return crud.create_classroom(db=db, classroom=classroom)
+    return crud.create_classroom(db, classroom)
 
 @router.get("/", response_model=List[ClassroomOut])
 def list_classrooms(db: Session = Depends(get_db)):

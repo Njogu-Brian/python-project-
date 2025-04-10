@@ -46,23 +46,30 @@ const Students = () => {
 
   const handleSaveEdit = async (e) => {
     e.preventDefault();
+  
     try {
-      await updateStudent(editingStudent.id, editingStudent);
+      const updatedData = {
+        name: editingStudent.name,
+        classroom_id: editingStudent.classroom_id
+      };
+  
+      await updateStudent(editingStudent.id, updatedData);
       setEditingStudent(null);
       loadStudents();
     } catch (error) {
       console.error("Error updating student:", error);
     }
   };
-
+    
   const handleDeleteStudent = async (id) => {
     try {
       await deleteStudent(id);
-      loadStudents();
+      setStudents((prev) => prev.filter((s) => s.id !== id)); 
     } catch (error) {
       console.error("Error deleting student:", error);
     }
   };
+  
 
   const sortStudents = (a, b) => {
     if (sortOption === "name") return a.name.localeCompare(b.name);

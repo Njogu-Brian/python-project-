@@ -8,18 +8,25 @@ const AddClassroomForm = ({ onCreated, classrooms, refresh }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name || !selectedClassId) return;
   
-    onAddStudent({
-      name,
-      classroom_id: selectedClassId,
-    });
+    if (form.id) {
+      await updateClassroom(form.id, {
+        name: form.name,
+        section: form.section,
+      });
+    } else {
+      await createClassroom({
+        name: form.name,
+        section: form.section,
+      });
+    }
   
-    setName("");
-    setSelectedClassId("");
-  };  
+    setForm({ id: null, name: "", section: "" });
+    refresh();
+  };
+  
 
   const handleEdit = (cls) => {
     setForm(cls);

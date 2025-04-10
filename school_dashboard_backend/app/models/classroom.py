@@ -7,5 +7,6 @@ class Classroom(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     section = Column(String, nullable=False)
+    name = Column(String, nullable=False)
 
     students = relationship("Student", back_populates="classroom")

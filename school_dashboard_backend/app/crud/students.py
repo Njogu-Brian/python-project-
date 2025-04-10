@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from app.models.student import Student
 from app.schemas.student import StudentCreate, StudentUpdate
 
@@ -10,7 +10,7 @@ def create_student(db: Session, student: StudentCreate):
     return new_student
 
 def get_students(db: Session):
-    return db.query(Student).all()
+    return db.query(Student).options(joinedload(Student.classroom)).all()
 
 def get_student_by_id(db: Session, student_id: int):
     return db.query(Student).filter(Student.id == student_id).first()

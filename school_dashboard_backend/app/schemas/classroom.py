@@ -2,6 +2,7 @@ from pydantic import BaseModel
 
 class ClassroomBase(BaseModel):
     section: str
+    name: str
 
 class ClassroomCreate(ClassroomBase):
     pass

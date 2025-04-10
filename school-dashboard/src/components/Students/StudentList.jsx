@@ -3,29 +3,10 @@ import { fetchStudents, deleteStudent } from "../../services/studentService";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./StudentList.css";
 
-const StudentList = ({ onEditClick }) => {
-  const [students, setStudents] = useState([]);
+const StudentList = ({ students, onEditClick, onDeleteClick }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const studentsPerPage = 10;
   const [sortField, setSortField] = useState("name");
-
-  useEffect(() => {
-    loadStudents();
-  }, []);
-
-  const loadStudents = async () => {
-    try {
-      const res = await fetchStudents();
-      setStudents(res.data);
-    } catch (err) {
-      console.error("Error fetching students:", err);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    await deleteStudent(id);
-    loadStudents();
-  };
 
   const sortedStudents = [...students].sort((a, b) =>
     a[sortField].toString().localeCompare(b[sortField].toString())
@@ -39,36 +20,38 @@ const StudentList = ({ onEditClick }) => {
   return (
     <div className="student-list-container">
       <h5 className="text-center">Student List</h5>
-
+      {/* Sorting UI */}
       <div className="sorting-controls">
         <label>Sort by:</label>
         <select className="form-select" onChange={(e) => setSortField(e.target.value)}>
           <option value="name">Name</option>
-          <option value="age">Age</option>
         </select>
       </div>
 
       <table className="table table-hover">
-          <thead className="table-light">
-      <tr>
-        <th>Name</th>
-        <th>Class</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {currentStudents.map((student) => (
-        <tr key={student.id}>
-          <td>{student.name}</td>
-          <td>{student.classroom?.name || "N/A"}</td>
-          <td>
-            <button className="btn btn-sm btn-success me-2" onClick={() => onEditClick(student)}>Edit</button>
-            <button className="btn btn-sm btn-danger" onClick={() => onDeleteClick(student.id)}>Delete</button>
-          </td>
-        </tr>
-      ))}
-    </tbody>
-
+        <thead className="table-light">
+          <tr>
+            <th>Name</th>
+            <th>Class</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {currentStudents.map((student) => (
+            <tr key={student.id}>
+              <td>{student.name}</td>
+              <td>
+                {student.classroom
+                  ? `${student.classroom.name} (${student.classroom.section})`
+                  : "N/A"}
+              </td>
+              <td>
+                <button className="btn btn-sm btn-success me-2" onClick={() => onEditClick(student)}>Edit</button>
+                <button className="btn btn-sm btn-danger" onClick={() => onDeleteClick(student.id)}>Delete</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
       </table>
 
       <div className="pagination-controls">
