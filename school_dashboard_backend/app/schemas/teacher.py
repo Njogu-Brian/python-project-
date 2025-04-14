@@ -9,8 +9,10 @@ class TeacherCreate(TeacherBase):
 class TeacherUpdate(TeacherBase):
     pass
 
-class TeacherOut(TeacherBase):
+class TeacherOut(BaseModel):
     id: int
+    name: str
+    experience: int
 
     class Config:
         from_attributes = True

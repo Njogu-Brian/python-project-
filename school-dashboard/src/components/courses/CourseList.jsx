@@ -17,8 +17,8 @@ const CourseList = ({ courses, onEdit, onDelete }) => {
         <tbody>
           {courses.map((course) => (
             <tr key={course.id}>
-              <td>{course.title}</td>
-              <td>{course.instructor}</td>
+              <td>{course.name}</td>
+              <td>{course.teacher ? course.teacher.name : "N/A"}</td>
               <td>{course.duration}</td>
               <td>
                 <Button variant="warning" size="sm" onClick={() => onEdit(course)}>Edit</Button>{' '}
