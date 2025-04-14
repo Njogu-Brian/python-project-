@@ -19,3 +19,6 @@ class Student(Base):
 
     classroom = relationship("Classroom", back_populates="students")
     courses = relationship("Course", secondary=student_course_table, back_populates="students")
+    transactions = relationship("Finance", back_populates="student")
+
+

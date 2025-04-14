@@ -10,3 +10,4 @@ class Teacher(Base):
     experience = Column(Integer, nullable=False)
 
     courses = relationship("Course", back_populates="teacher")
+    transactions = relationship("Finance", back_populates="teacher")

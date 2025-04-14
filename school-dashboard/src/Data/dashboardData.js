@@ -29,12 +29,6 @@ const dashboardData = [
     description: "Handle school fees, invoices, and financial reports.",
     link: "/finance"
   },
-  {
-    title: "Settings",
-    image: settingsImg,
-    description: "Customize school settings, user roles, and system configurations.",
-    link: "/settings"
-  }
   
 ];
 

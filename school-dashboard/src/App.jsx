@@ -8,7 +8,7 @@ function App() {
     <div>
       <NavBar />
       <div className="content">
-        <Outlet />  {/* This will render the current page */}
+        <Outlet />  
       </div>
     </div>
   );
